@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tic Tac Toe</title>
+    <style>
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 2px;
+            margin-bottom: 10px;
+        }
+        .cell {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 36px;
+            border: 1px solid black;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="board" onclick="handleClick(event)">
+        <div class="cell" data-index="0"></div>
+        <div class="cell" data-index="1"></div>
+        <div class="cell" data-index="2"></div>
+        <div class="cell" data-index="3"></div>
+        <div class="cell" data-index="4"></div>
+        <div class="cell" data-index="5"></div>
+        <div class="cell" data-index="6"></div>
+        <div class="cell" data-index="7"></div>
+        <div class="cell" data-index="8"></div>
+    </div>
+
+    <script>
+        const board = document.querySelector('.board');
+        let currentPlayer = 'X';
+        let boardState = ['', '', '', '', '', '', '', '', ''];
+
+        function handleClick(event) {
+            const cell = event.target;
+            const index = cell.dataset.index;
+
+            if (boardState[index] === '') {
+                boardState[index] = currentPlayer;
+                cell.textContent = currentPlayer;
+                checkWinner();
+                currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            }
+        }
+
+        function checkWinner() {
+            const winningCombos = [
+                [0, 1, 2],
+                [3, 4, 5],
+                [6, 7, 8],
+                [0, 3, 6],
+                [1, 4, 7],
+                [2, 5, 8],
+                [0, 4, 8],
+                [2, 4, 6]
+            ];
+
+            for (let combo of winningCombos) {
+                const [a, b, c] = combo;
+                if (boardState[a] && boardState[a] === boardState[b] && boardState[a] === boardState[c]) {
+                    alert(`${boardState[a]} wins!`);
+                    resetGame();
+                    return;
+                }
+            }
+
+            if (!boardState.includes('')) {
+                alert('It\'s a draw!');
+                resetGame();
+            }
+        }
+
+        function resetGame() {
+            currentPlayer = 'X';
+            boardState = ['', '', '', '', '', '', '', '', ''];
+            document.querySelectorAll('.cell').forEach(cell => cell.textContent = '');
+        }
+    </script>
+</body>
+</html>
